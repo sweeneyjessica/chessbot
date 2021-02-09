@@ -1,4 +1,5 @@
 import pprint
+import pyttsx3
 import scipy.io.wavfile as wav
 import sounddevice as sd
 from wit import Wit
@@ -20,6 +21,8 @@ sd.default.samplerate = sample_rate
 
 duration = 6 # record for six seconds
 
+engine = pyttsx3.init()
+
 print("Hit enter to continue, type `stop` to stop.")
 
 while input() != "stop":
@@ -32,7 +35,9 @@ while input() != "stop":
     with open("output_sound.wav", "rb") as f:
         resp = client.speech(f, {'Content-Type':'audio/wav'}) # send to wit
 
-    pprint.pprint(resp)
+    print(resp['text'])
+    engine.say(resp['text'])
+    engine.runAndWait()
 
     print("Hit enter to continue, type `stop` to stop.")
 
