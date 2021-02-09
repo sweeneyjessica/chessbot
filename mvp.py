@@ -33,3 +33,6 @@ while input() != "stop":
         resp = client.speech(f, {'Content-Type':'audio/wav'}) # send to wit
 
     pprint.pprint(resp)
+
+    print("Hit enter to continue, type `stop` to stop.")
+
