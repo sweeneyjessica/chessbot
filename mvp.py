@@ -19,7 +19,7 @@ client = Wit(access_token)
 sample_rate = 44100
 sd.default.samplerate = sample_rate
 
-duration = 6 # record for six seconds
+duration = 3 # record for three seconds
 
 engine = pyttsx3.init()
 
