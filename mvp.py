@@ -35,9 +35,8 @@ while input() != "stop":
     with open("output_sound.wav", "rb") as f:
         resp = client.speech(f, {'Content-Type':'audio/wav'}) # send to wit
 
-    print(resp['text'])
+    pprint.pprint(resp)
     engine.say(resp['text'])
     engine.runAndWait()
 
     print("Hit enter to continue, type `stop` to stop.")
-

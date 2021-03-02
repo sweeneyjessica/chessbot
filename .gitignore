@@ -1,6 +1,7 @@
 # Added by me
 .DS_Store
 .idea/
+chessbot_audio*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
