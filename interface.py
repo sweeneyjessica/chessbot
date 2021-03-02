@@ -10,7 +10,7 @@ from wit import Wit
 import time
 
 
-
+blank = {'_text': '', 'entities': {}}
 chrome_path = 'open -a /Applications/Google\ Chrome.app %s'
 
 board = chess.Board()
@@ -54,6 +54,11 @@ if __name__ == "__main__":
 
 
         print(resp)
+
+        if resp == blank:
+            print("Sorry I didn't get that")
+            continue
+
         try:
             if 'piece:capturer' in resp['entities']:
                 piece = resp['entities']['piece:capturer'][0]['value']
@@ -65,7 +70,9 @@ if __name__ == "__main__":
 
                 san_move = square
         except:
-            san_move = input()
+            print("Sorry I didn't get that")
+            continue
+            #san_move = input()
 
         try:
             move = board.push_san(san_move)
