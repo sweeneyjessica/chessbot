@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
         print("Make a move:")
 
-        myrecording = sd.rec(duration * sample_rate, channels=1)
+        myrecording = sd.rec(duration * sample_rate)
         sd.wait()
 
         wav.write("output_sound.wav", sample_rate, myrecording)  # create wav file
