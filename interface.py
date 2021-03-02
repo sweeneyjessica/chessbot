@@ -56,7 +56,7 @@ if __name__ == "__main__":
         print(resp)
 
         if resp == blank:
-            print("Sorry I didn't get that")
+            print("Hm, I didn't hear anything, is your mic working?")
             continue
 
         try:
@@ -70,7 +70,15 @@ if __name__ == "__main__":
 
                 san_move = square
         except:
-            print("Sorry I didn't get that")
+            print("Sorry I didn't get that, try 'alpha four' or 'queen delta two'")
+            print('''A as in Alpha
+B as in Bravo
+C as in Charlie
+D as in Delta
+E as in Echo
+F as in Foxtrot or Foot (foxtrot doesn't work very well)
+G as in Golf or Gamma
+H as in Hotel''')
             continue
             #san_move = input()
 
@@ -78,12 +86,13 @@ if __name__ == "__main__":
             move = board.push_san(san_move)
             uci_move = move.uci()
         except:
+            print('Invalid move')
             continue
 
         auto_move = opponent.get_move(uci_move)
         board.push(chess.Move.from_uci(auto_move))
 
-        opponent.print_board()
+        #opponent.print_board()
 
     
 
