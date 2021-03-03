@@ -8,6 +8,7 @@ import sounddevice as sd
 import scipy.io.wavfile as wav
 from wit import Wit
 import time
+from recorder import record
 
 
 blank = {'_text': '', 'entities': {}}
@@ -20,16 +21,6 @@ opponent.print_board()
 if __name__ == "__main__":
     piece_mapping = {'king':'K', 'queen':'Q', 'knight':'N', 'bishop':'B', 'rook':'R', 'pawn':''}
 
-
-    sample_rate = 44100
-    sd.default.samplerate = sample_rate
-
-    duration = 4  # record for three seconds
-
-    access_token = "WF7LRTYFMA6VOCP7ORHYDDE464DTUC2I"
-
-    client = Wit(access_token)
-
     chessboardSvg = chess.svg.board(board)
     f1 = open('test.svg', 'w')
     f1.write(chessboardSvg)
@@ -41,24 +32,7 @@ if __name__ == "__main__":
 
     while not board.is_checkmate():
 
-        time.sleep(3)
-
-        print("Make a move:")
-
-        myrecording = sd.rec(duration * sample_rate, channels=1)
-        sd.wait()
-
-        wav.write("output_sound.wav", sample_rate, myrecording)  # create wav file
-
-        with open("output_sound.wav", "rb") as f:
-            resp = client.speech(f, {'Content-Type': 'audio/wav'})  # send to wit
-
-
-        print(resp)
-
-        if resp == blank:
-            print("Hm, I didn't hear anything, is your mic working?")
-            continue
+        resp = record()
 
         try:
             print(resp['intents'][0]['name'])
@@ -68,7 +42,6 @@ if __name__ == "__main__":
                 continue
 
             if resp['intents'][0]['name'] == 'request_best_move':
-                print("hi")
                 suggested_move = opponent.get_suggestion()
                 start_square = chess.Move.from_uci(suggested_move).from_square
                 end_square = chess.Move.from_uci(suggested_move).to_square
