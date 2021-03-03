@@ -14,6 +14,12 @@ class Computer:
 
         return auto_move
 
+    def get_suggestion(self):
+        self.engine.set_position(self.move_history)
+        auto_move = self.engine.get_best_move()
+
+        return auto_move
+
     def print_board(self):
         self.engine.set_position(self.move_history)
         print(self.engine.get_board_visual())

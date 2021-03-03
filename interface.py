@@ -30,15 +30,16 @@ if __name__ == "__main__":
 
     client = Wit(access_token)
 
+    chessboardSvg = chess.svg.board(board)
+    f1 = open('test.svg', 'w')
+    f1.write(chessboardSvg)
+    f1.close()
+
+    # MacOS
+
+    webbrowser.get(chrome_path).open('test.svg')
+
     while not board.is_checkmate():
-        chessboardSvg = chess.svg.board(board)
-        f1 = open('test.svg','w')
-        f1.write(chessboardSvg)
-        f1.close()
-
-        # MacOS
-
-        webbrowser.get(chrome_path).open('test.svg')
 
         time.sleep(3)
 
@@ -60,6 +61,27 @@ if __name__ == "__main__":
             continue
 
         try:
+            print(resp['intents'][0]['name'])
+            if resp['intents'][0]['name'] == 'take_back':
+                board.pop()
+                board.pop()
+                continue
+
+            if resp['intents'][0]['name'] == 'request_best_move':
+                print("hi")
+                suggested_move = opponent.get_suggestion()
+                start_square = chess.Move.from_uci(suggested_move).from_square
+                end_square = chess.Move.from_uci(suggested_move).to_square
+
+                displaySuggestedMove = chess.svg.board(board, arrows=[chess.svg.Arrow(start_square, end_square)])
+                f1 = open('test.svg', 'w')
+                f1.write(displaySuggestedMove)
+                f1.close()
+
+                webbrowser.get(chrome_path).open('test.svg')
+
+                continue
+
             if 'piece:capturer' in resp['entities']:
                 piece = resp['entities']['piece:capturer'][0]['value']
                 square = resp['entities']['square:square'][0]['value']
@@ -92,7 +114,14 @@ H as in Hotel''')
         auto_move = opponent.get_move(uci_move)
         board.push(chess.Move.from_uci(auto_move))
 
-        #opponent.print_board()
+        chessboardSvg = chess.svg.board(board)
+        f1 = open('test.svg', 'w')
+        f1.write(chessboardSvg)
+        f1.close()
+
+        # MacOS
+
+        webbrowser.get(chrome_path).open('test.svg')
 
     
 
