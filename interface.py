@@ -11,14 +11,15 @@ import time
 from recorder import record
 
 
-blank = {'_text': '', 'entities': {}}
-chrome_path = 'open -a /Applications/Google\ Chrome.app %s'
+def play_game(opp_type):
+    blank = {'_text': '', 'entities': {}}
+    chrome_path = 'open -a /Applications/Google\ Chrome.app %s'
 
-board = chess.Board()
-opponent = Computer(10)
-opponent.print_board()
+    board = chess.Board()
 
-if __name__ == "__main__":
+    opponent = Computer(10)
+    #opponent.print_board()
+
     piece_mapping = {'king':'K', 'queen':'Q', 'knight':'N', 'bishop':'B', 'rook':'R', 'pawn':''}
 
     chessboardSvg = chess.svg.board(board)
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     while not board.is_checkmate():
 
         resp = record()
-
+        
         try:
             print(resp['intents'][0]['name'])
             if resp['intents'][0]['name'] == 'take_back':
@@ -80,12 +81,15 @@ H as in Hotel''')
         try:
             move = board.push_san(san_move)
             uci_move = move.uci()
+            #opponent.print_board()
         except:
             print('Invalid move')
             continue
 
-        auto_move = opponent.get_move(uci_move)
-        board.push(chess.Move.from_uci(auto_move))
+        if opp_type == 'computer':
+            auto_move = opponent.get_move(uci_move)
+            board.push(chess.Move.from_uci(auto_move))
+
 
         chessboardSvg = chess.svg.board(board)
         f1 = open('test.svg', 'w')
