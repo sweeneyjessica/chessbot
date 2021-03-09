@@ -9,6 +9,7 @@ import scipy.io.wavfile as wav
 from wit import Wit
 import time
 from recorder import record
+from cairosvg import svg2png
 
 
 def play_game(opp_type):
@@ -23,6 +24,7 @@ def play_game(opp_type):
     piece_mapping = {'king':'K', 'queen':'Q', 'knight':'N', 'bishop':'B', 'rook':'R', 'pawn':''}
 
     chessboardSvg = chess.svg.board(board)
+    svg2png(bytestring=chessboardSvg,write_to='test.png')
     f1 = open('test.svg', 'w')
     f1.write(chessboardSvg)
     f1.close()
