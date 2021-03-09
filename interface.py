@@ -11,6 +11,10 @@ import time
 from recorder import record
 from cairosvg import svg2png
 from PIL import Image
+import subprocess
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
 
 
 def play_game(opp_type):
@@ -26,16 +30,7 @@ def play_game(opp_type):
 
     chessboardSvg = chess.svg.board(board)
     svg2png(bytestring=chessboardSvg,write_to='test.png')
-    img  = Image.open('test.png') 
-    img.show()
-
-    #f1 = open('test.svg', 'w')
-    #f1.write(chessboardSvg)
-    #f1.close()
-
-    # MacOS
-
-    #webbrowser.get(chrome_path).open('test.svg')
+    #viewer = subprocess.Popen(['open','test.png'])
 
     while not board.is_checkmate():
 
@@ -53,11 +48,10 @@ def play_game(opp_type):
                 start_square = chess.Move.from_uci(suggested_move).from_square
                 end_square = chess.Move.from_uci(suggested_move).to_square
 
+                #viewer.kill()
                 displaySuggestedMove = chess.svg.board(board, arrows=[chess.svg.Arrow(start_square, end_square)])
                 svg2png(bytestring=displaySuggestedMove,write_to='test.png')
-                img.close()
-                img  = Image.open('test.png') 
-                img.show()
+                #viewer = subprocess.Popen(['open','test.png'])
                 # f1 = open('test.svg', 'w')
                 # f1.write(displaySuggestedMove)
                 # f1.close()
@@ -101,11 +95,10 @@ H as in Hotel''')
             board.push(chess.Move.from_uci(auto_move))
 
 
+        #viewer.kill()
         chessboardSvg = chess.svg.board(board)
         svg2png(bytestring=chessboardSvg,write_to='test.png')
-        img.close()
-        img  = Image.open('test.png') 
-        img.show()
+        #viewer = subprocess.Popen(['open','test.png'])
         # chessboardSvg = chess.svg.board(board)
         # f1 = open('test.svg', 'w')
         # f1.write(chessboardSvg)
