@@ -14,8 +14,7 @@ from PIL import Image
 import subprocess
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-
-
+from NLU import NLUDefault
 
 def play_game(opp_type):
     blank = {'_text': '', 'entities': {}}
@@ -30,12 +29,17 @@ def play_game(opp_type):
 
     chessboardSvg = chess.svg.board(board)
     svg2png(bytestring=chessboardSvg,write_to='test.png')
-    #viewer = subprocess.Popen(['open','test.png'])
+
+    NLU = NLUDefault()
 
     while not board.is_checkmate():
 
         resp = record()
-        
+        intent, text, slots = NLU.parse(resp)
+        print(intent)
+        print(text)
+        print(slots)
+
         try:
             print(resp['intents'][0]['name'])
             if resp['intents'][0]['name'] == 'take_back':
@@ -51,7 +55,7 @@ def play_game(opp_type):
                 #viewer.kill()
                 displaySuggestedMove = chess.svg.board(board, arrows=[chess.svg.Arrow(start_square, end_square)])
                 svg2png(bytestring=displaySuggestedMove,write_to='test.png')
-                #viewer = subprocess.Popen(['open','test.png'])
+
                 # f1 = open('test.svg', 'w')
                 # f1.write(displaySuggestedMove)
                 # f1.close()
