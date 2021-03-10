@@ -1,3 +1,5 @@
+import pprint
+
 class NLUDefault:
 
     def __init__(self):
@@ -14,11 +16,15 @@ class NLUDefault:
         if self.Intent == "take_back" or self.Intent == "request_best_move":
             return self.Intent, self.UnderstoodText, self.Slots
 
+        if self.Intent == "confirm" or self.Intent == "deny":
+            return self.Intent, self.UnderstoodText, self.Slots
+
+
         if self.Intent == "move_piece":
             piece = None
             square = None
 
-            print(wit_resp['entities'])
+            pprint.pprint(wit_resp)
 
             if 'piece:capturer' in wit_resp['entities']:
                 piece = wit_resp['entities']['piece:capturer'][0]['value']

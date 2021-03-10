@@ -10,11 +10,18 @@ from wit import Wit
 import time
 from recorder import record
 from menu import menu
-from interface import play_game
+from interface import FrameDM
+from NLU import NLUDefault
+from NLG import NLGDefault
 
 
 if __name__ == '__main__':
-	game_type = menu()
+	#game_type = menu()
+	game_type = 'computer'
+	NLU = NLUDefault()
+	NLG = NLGDefault()
+	DialogManager = FrameDM(NLU, NLG)
+
 
 	#launch game
-	play_game(game_type)
+	DialogManager.play_game(game_type)
