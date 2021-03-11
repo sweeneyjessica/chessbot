@@ -22,11 +22,16 @@ class FrameDM:
         self.NLG = NLG
         self.DialogFrame = DialogFrameSimple()
 
-    def play_game(self, opp_type):
+    def play_game(self, opp_type, opp_level):
 
         self.DialogFrame.opponent_type = opp_type
         if opp_type == 'computer':
-            self.DialogFrame.computer_engine = Computer(10)
+            if opp_level == 'easy':
+                self.DialogFrame.computer_engine = Computer(1)
+            if opp_level == 'medium':
+                self.DialogFrame.computer_engine = Computer(5)
+            if opp_level == 'hard':
+                self.DialogFrame.computer_engine = Computer(10)
 
         self.DialogFrame.board_obj = chess.Board()
         write_png(self.DialogFrame.board_obj)
