@@ -26,7 +26,11 @@ def record():
 		print("Go ahead I'm listening...")
 		print('-------------------------')
 		myrecording = sd.rec(duration * sample_rate, channels=1)
-		sd.wait()
+		t = duration
+		while t >= 0:
+			print('0:0{}'.format(t),end='\r')
+			time.sleep(1)
+			t-=1
 
 		wav.write("output_sound.wav", sample_rate, myrecording)  # create wav file
 
