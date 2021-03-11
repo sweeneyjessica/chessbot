@@ -10,8 +10,13 @@ class NLUDefault:
         self.piece_mapping = {'king': 'K', 'queen': 'Q', 'knight': 'N', 'bishop': 'B', 'rook': 'R', 'pawn': ''}
 
     def parse(self, wit_resp):
-        self.Intent = wit_resp['intents'][0]['name']
+
         self.UnderstoodText = wit_resp['text']
+
+        if wit_resp['intents'] == []:
+            return self.Intent, self.UnderstoodText, self.Slots
+
+        self.Intent = wit_resp['intents'][0]['name']
 
         if self.Intent == "take_back" or self.Intent == "request_best_move":
             return self.Intent, self.UnderstoodText, self.Slots

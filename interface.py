@@ -4,7 +4,7 @@ import chess.svg
 from recorder import record
 from cairosvg import svg2png
 from DialogFrameSimple import DialogFrameSimple
-
+import pprint
 
 def write_png(chessboard, start = None, end = None):
     if start == None:
@@ -37,22 +37,24 @@ class FrameDM:
         while not self.DialogFrame.board_obj.is_checkmate():
 
             resp = record()
+            pprint.pprint(resp)
             intent, text, slots = self.NLU.parse(resp)
-            output = self.execute(intent, text, slots)
+            output = self.execute(intent, text, slots) # updates frame and generates NLG response
 
             print(output)
-
-
-
 
     def execute(self, intent, text, slots):
 
         if intent == "confirm":
             if self.DialogFrame.request_best_move:
                 user_move = self.DialogFrame.board_obj.san(self.DialogFrame.suggested_move)
+                self.DialogFrame.request_best_move = False
+                self.DialogFrame.suggested_move = None
 
         elif intent == 'deny':
             if self.DialogFrame.request_best_move:
+                self.DialogFrame.request_best_move = False
+                self.DialogFrame.suggested_move = None
                 return self.NLG.generate('prompt_move')
 
         elif intent == "request_best_move":
@@ -67,6 +69,7 @@ class FrameDM:
             self.DialogFrame.request_best_move = True
 
             return self.NLG.generate(intent, suggested_move)
+
         elif intent == "move_piece":
             if self.DialogFrame.clarify:
                 if self.DialogFrame.understood_piece is not None:
@@ -83,6 +86,21 @@ class FrameDM:
                         piece = slots['piece']
                         self.DialogFrame.clarify = False
                     else:
+                        self.DialogFrame.clarify = True
+                        return self.NLG.generate('clarify', 'piece')
+                else:
+                    if slots['piece'] != 'unclear':
+                        piece = slots['piece']
+                        self.DialogFrame.understood_piece = piece
+                    if slots['square'] != 'unclear':
+                        square = slots['square']
+                        self.DialogFrame.understood_square = square
+
+                    if self.DialogFrame.understood_square is None:
+                        self.DialogFrame.clarify = True
+                        return self.NLG.generate('clarify', 'square')
+
+                    if self.DialogFrame.understood_piece is None:
                         self.DialogFrame.clarify = True
                         return self.NLG.generate('clarify', 'piece')
             else:
@@ -105,6 +123,10 @@ class FrameDM:
 
             user_move = "{}{}".format(self.DialogFrame.piece_mapping[piece], square)
 
+            self.DialogFrame.understood_piece = None
+            self.DialogFrame.understood_square = None
+            self.DialogFrame.clarify = False
+
         else:
             return self.NLG.generate('misunderstood')
 
@@ -114,9 +136,12 @@ class FrameDM:
         except:
             return self.NLG.generate('invalid_move')
 
+        self.DialogFrame.move_history.append(uci_move)
+
         if self.DialogFrame.opponent_type == 'computer':
             auto_move = self.DialogFrame.computer_engine.get_move(uci_move)
             self.DialogFrame.board_obj.push(chess.Move.from_uci(auto_move))
+            self.DialogFrame.move_history.append(auto_move)
 
             write_png(self.DialogFrame.board_obj)
 

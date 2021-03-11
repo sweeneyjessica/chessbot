@@ -4,7 +4,7 @@ class NLGDefault:
     def __init__(self):
         self.Name = "NLGDefault"
 
-    def generate(self, intent, more_info):
+    def generate(self, intent, more_info=None):
         if intent == 'request_best_move':
             return "The best move here is: {}\nDo you want to play this move?".format(more_info)
 
