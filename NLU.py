@@ -13,6 +13,12 @@ class NLUDefault:
         self.Intent = wit_resp['intents'][0]['name']
         self.UnderstoodText = wit_resp['text']
 
+        if self.Intent == 'game_type':
+            return self.Intent, self.UnderstoodText, self.Slots
+
+        if self.Intent == 'difficulty':
+            return self.Intent, self.UnderstoodText, self.Slots
+
         if self.Intent == "take_back" or self.Intent == "request_best_move":
             return self.Intent, self.UnderstoodText, self.Slots
 

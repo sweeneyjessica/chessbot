@@ -16,12 +16,17 @@ from NLG import NLGDefault
 
 
 if __name__ == '__main__':
-	#game_type = menu()
-	game_type = 'computer'
+
+	#initialize objects
 	NLU = NLUDefault()
 	NLG = NLGDefault()
+
+	game_type,opp_level = menu(debug=False)
+	#game_type = 'computer'
+
+	
 	DialogManager = FrameDM(NLU, NLG)
 
 
 	#launch game
-	DialogManager.play_game(game_type)
+	DialogManager.play_game(game_type,opp_level)
