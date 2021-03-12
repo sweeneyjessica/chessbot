@@ -36,16 +36,12 @@ class FrameDM:
         self.DialogFrame.board_obj = chess.Board()
         write_png(self.DialogFrame.board_obj)
 
-        chessboardSvg = chess.svg.board(self.DialogFrame.board_obj)
-        svg2png(bytestring=chessboardSvg,write_to='test.png')
-
         while not self.DialogFrame.board_obj.is_checkmate():
 
             resp = record()
             pprint.pprint(resp)
             intent, text, slots = self.NLU.parse(resp)
             output = self.execute(intent, text, slots) # updates frame and generates NLG response
-
             print(output)
 
     def execute(self, intent, text, slots):
@@ -68,7 +64,6 @@ class FrameDM:
             end_square = chess.Move.from_uci(suggested_move).to_square
             self.DialogFrame.suggested_move = suggested_move
 
-            # viewer.kill()
             write_png(self.DialogFrame.board_obj, start_square, end_square)
 
             self.DialogFrame.request_best_move = True
@@ -138,6 +133,7 @@ class FrameDM:
         try:
             move = self.DialogFrame.board_obj.push_san(user_move)
             uci_move = move.uci()
+            write_png(self.DialogFrame.board_obj)
         except:
             return self.NLG.generate('invalid_move')
 
