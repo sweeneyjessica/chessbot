@@ -28,10 +28,12 @@ class FrameDM:
         if opp_type == 'computer':
             if opp_level == 'easy':
                 self.DialogFrame.computer_engine = Computer(1)
-            if opp_level == 'medium':
+            elif opp_level == 'medium':
                 self.DialogFrame.computer_engine = Computer(5)
-            if opp_level == 'hard':
+            elif opp_level == 'hard':
                 self.DialogFrame.computer_engine = Computer(10)
+            else:
+                self.DialogFrame.computer_engine = Computer(1)
 
         self.DialogFrame.board_obj = chess.Board()
         write_png(self.DialogFrame.board_obj)

@@ -94,6 +94,8 @@ class NLUDefault:
             elif "no" in utterance:
                 self.Intent = "deny"
 
+        return self.Intent,self.UnderstoodText,self.Slots
+
 
 
 
