@@ -4,6 +4,15 @@ from NLU import NLUDefault
 
 def menu(debug=False):
 
+	phonetic_code = '''A as in Alpha
+B as in Bravo
+C as in Charlie
+D as in Delta
+E as in Extra
+F as in Foxtrot or Foot (foxtrot doesn't work very well)
+G as in Golf or Gamma
+H as in Hotel'''
+
 	#initialize NLU for menu
 	NLU = NLUDefault()
 	opp_level = ''
@@ -40,17 +49,39 @@ def menu(debug=False):
 			resp = record()
 			intent,text,slots = NLU.parse(resp)
 
+			ready = False
 
 			if intent == 'confirm':
 				if opp_type == 'friend':
+					print('Before we get started, this will help me understand the moves you input.')
+					print('For each square (A-G) use the following words')
+					print(phonetic_code)
+					print('After the word, say the number (1-8)')
+					print('For example say your move like the following:')
+					print('alpha six OR knight bravo three OR king extra five')
+					print('Okay, when you are ready, type any key and hit enter')
+					ready = input()
 					print("Great, Let's get started!")
 					print('-------------------------------')
 					return opp_type,opp_level
+
 				elif opp_type == 'computer':
 					print('What level computer? (easy, medium, or hard)')
 					resp = record()
 					intent,opp_level,slots = NLU.parse(resp)
-					return opp_type,opp_level
+					
+					print('Before we get started, this will help me understand the moves you input.')
+					print('For each square (A-G) use the following words')
+					print(phonetic_code)
+					print('After the word, say the number (1-8)')
+					print('For example say your move like the following:')
+					print('alpha six OR knight bravo three OR king extra five')
+					print('Okay, when you are ready, type any key and hit enter')
+					ready = input()
+					print("Great, Let's get started!")
+					print('-------------------------------')
+					return opp_type,opp_level	
+
 
 			else:
 				print("I heard no, so let's start over")
