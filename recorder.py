@@ -23,6 +23,9 @@ def record():
 
 		client = Wit(access_token)
 
+		print('Hit enter and I will start recording.')
+		placeholder = input()
+
 		print("Go ahead I'm listening...")
 		print('-------------------------')
 		myrecording = sd.rec(duration * sample_rate, channels=1)

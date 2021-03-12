@@ -9,7 +9,7 @@ B as in Bravo
 C as in Charlie
 D as in Delta
 E as in Extra
-F as in Foxtrot or Foot (foxtrot doesn't work very well)
+F as in Foot
 G as in Golf or Gamma
 H as in Hotel'''
 
@@ -63,6 +63,7 @@ H as in Hotel'''
 					ready = input()
 					print("Great, Let's get started!")
 					print('-------------------------------')
+					print('White moves first')
 					return opp_type,opp_level
 
 				elif opp_type == 'computer':
@@ -80,6 +81,7 @@ H as in Hotel'''
 					ready = input()
 					print("Great, Let's get started!")
 					print('-------------------------------')
+					print('White moves first')
 					return opp_type,opp_level	
 
 
