@@ -12,4 +12,5 @@ class DialogFrameSimple:
         self.understood_square = None
         self.request_best_move = False
         self.suggested_move = None
+        self.misunderstood_times = 0
         self.piece_mapping = {'king':'K', 'queen':'Q', 'knight':'N', 'bishop':'B', 'rook':'R', 'pawn':'', '':'', None:''}

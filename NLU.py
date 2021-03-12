@@ -8,6 +8,10 @@ class NLUDefault:
         self.Slots = {}
 
         self.piece_mapping = {'king': 'K', 'queen': 'Q', 'knight': 'N', 'bishop': 'B', 'rook': 'R', 'pawn': ''}
+        self.backwards_mapping = {'K':'king', 'Q':'queen', 'N':'knight', 'B':'bishop', 'R':'rook'}
+
+        self.req_best_move = ['best move', 'should', 'optimal', 'recommend', 'recommended',
+                              'best', 'top', 'ideal', 'suggest', 'suggested']
 
     def parse(self, wit_resp):
 
@@ -57,6 +61,39 @@ class NLUDefault:
                 self.Slots['square'] = 'unclear'
 
             return self.Intent, self.UnderstoodText, self.Slots
+
+    def parse_text(self, utterance):
+        self.UnderstoodText = utterance
+
+        utterance = "".join(utterance.lower().split()) # remove internal/external whitespace
+
+        if any(char.isdigit() for char in utterance):
+            self.Intent = "move_piece"
+
+            if len(utterance) == 3:
+                self.Slots['piece'] = self.backwards_mapping[utterance[0]]
+                self.Slots['square'] = utterance[1:3]
+            elif len(utterance) == 2:
+                self.Slots['piece'] = '' #pawn move
+                self.Slots['square'] = utterance
+            else:
+                self.Slots['piece'] = 'unclear'
+                self.Slots['square'] = 'unclear'
+        else:
+            for key in self.piece_mapping:
+                if key in utterance:
+                    self.Slots['piece'] = key
+
+            for phrase in self.req_best_move:
+                if phrase in utterance:
+                    self.Intent = 'request_best_move'
+
+            if "yes" in utterance:
+                self.Intent = "confirm"
+
+            elif "no" in utterance:
+                self.Intent = "deny"
+
 
 
 

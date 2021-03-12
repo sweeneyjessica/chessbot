@@ -38,9 +38,15 @@ class FrameDM:
 
         while not self.DialogFrame.board_obj.is_checkmate():
 
-            resp = record()
-            pprint.pprint(resp)
-            intent, text, slots = self.NLU.parse(resp)
+            if self.DialogFrame.misunderstood_times < 2:
+                resp = record()
+                pprint.pprint(resp)
+                intent, text, slots = self.NLU.parse(resp)
+            else:
+                utterance = input("Please type your move or request:")
+                intent, text, slots = self.NLU.parse_text(utterance)
+                self.DialogFrame.misunderstood_times = 0
+
             output = self.execute(intent, text, slots) # updates frame and generates NLG response
             print(output)
 
@@ -52,10 +58,15 @@ class FrameDM:
                 self.DialogFrame.request_best_move = False
                 self.DialogFrame.suggested_move = None
 
+                self.DialogFrame.misunderstood_times = 0
+
         elif intent == 'deny':
             if self.DialogFrame.request_best_move:
                 self.DialogFrame.request_best_move = False
                 self.DialogFrame.suggested_move = None
+
+                self.DialogFrame.misunderstood_times = 0
+
                 return self.NLG.generate('prompt_move')
 
         elif intent == "request_best_move":
@@ -67,6 +78,7 @@ class FrameDM:
             write_png(self.DialogFrame.board_obj, start_square, end_square)
 
             self.DialogFrame.request_best_move = True
+            self.DialogFrame.misunderstood_times = 0
 
             return self.NLG.generate(intent, suggested_move)
 
@@ -79,6 +91,8 @@ class FrameDM:
                         self.DialogFrame.clarify = False
                     else:
                         self.DialogFrame.clarify = True
+                        self.DialogFrame.misunderstood_times += 1
+
                         return self.NLG.generate('clarify', 'square')
                 elif self.DialogFrame.understood_square is not None:
                     square = self.DialogFrame.understood_square
@@ -87,6 +101,8 @@ class FrameDM:
                         self.DialogFrame.clarify = False
                     else:
                         self.DialogFrame.clarify = True
+                        self.DialogFrame.misunderstood_times += 1
+
                         return self.NLG.generate('clarify', 'piece')
                 else:
                     if slots['piece'] != 'unclear':
@@ -98,24 +114,33 @@ class FrameDM:
 
                     if self.DialogFrame.understood_square is None:
                         self.DialogFrame.clarify = True
+                        self.DialogFrame.misunderstood_times += 1
+
                         return self.NLG.generate('clarify', 'square')
 
                     if self.DialogFrame.understood_piece is None:
                         self.DialogFrame.clarify = True
+                        self.DialogFrame.misunderstood_times += 1
+
                         return self.NLG.generate('clarify', 'piece')
             else:
                 if slots['piece'] == 'unclear':
                     self.DialogFrame.clarify = True
                     if slots['square'] != 'unclear':
                         self.DialogFrame.understood_square = slots['square']
+
+                    self.DialogFrame.clarify = True
+                    self.DialogFrame.misunderstood_times += 1
+
                     return self.NLG.generate('clarify', 'piece')
                 else:
                     piece = slots['piece']
                 if slots['square'] == 'unclear':
-                    self.DialogFrame.clarify = True
-
                     if slots['piece'] != 'unclear':
-                        self.DialogFrame.understood_piece = slots['piece'] # REMEMBER TO UNSET THESE AFTER USING THEM
+                        self.DialogFrame.understood_piece = slots['piece']
+
+                    self.DialogFrame.clarify = True
+                    self.DialogFrame.misunderstood_times += 1
 
                     return self.NLG.generate('clarify', 'square')
                 else:
@@ -126,8 +151,10 @@ class FrameDM:
             self.DialogFrame.understood_piece = None
             self.DialogFrame.understood_square = None
             self.DialogFrame.clarify = False
+            self.DialogFrame.misunderstood_times = 0
 
         else:
+            self.DialogFrame.misunderstood_times += 1
             return self.NLG.generate('misunderstood')
 
         try:
