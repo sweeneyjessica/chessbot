@@ -22,8 +22,6 @@ if __name__ == '__main__':
 	NLG = NLGDefault()
 
 	game_type,opp_level = menu(debug=False)
-	#game_type = 'computer'
-
 	
 	DialogManager = FrameDM(NLU, NLG)
 

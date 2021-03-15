@@ -8,7 +8,7 @@ class NLUDefault:
         self.Slots = {}
 
         self.piece_mapping = {'king': 'K', 'queen': 'Q', 'knight': 'N', 'bishop': 'B', 'rook': 'R', 'pawn': ''}
-        self.backwards_mapping = {'K':'king', 'Q':'queen', 'N':'knight', 'B':'bishop', 'R':'rook'}
+        self.backwards_mapping = {'k':'king', 'q':'queen', 'n':'knight', 'b':'bishop', 'r':'rook'}
 
         self.req_best_move = ['best move', 'should', 'optimal', 'recommend', 'recommended',
                               'best', 'top', 'ideal', 'suggest', 'suggested']
@@ -39,7 +39,7 @@ class NLUDefault:
             piece = None
             square = None
 
-            pprint.pprint(wit_resp)
+            #pprint.pprint(wit_resp)
 
             if 'piece:capturer' in wit_resp['entities']:
                 piece = wit_resp['entities']['piece:capturer'][0]['value']
