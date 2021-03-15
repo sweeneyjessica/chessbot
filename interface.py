@@ -50,7 +50,7 @@ class FrameDM:
                 self.DialogFrame.misunderstood_times = 0
 
             output = self.execute(intent, text, slots) # updates frame and generates NLG response
-            #print(output)
+            print(output)
 
     def execute(self, intent, text, slots):
 
