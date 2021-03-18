@@ -2,17 +2,23 @@ from engine import Computer
 import chess
 import chess.svg
 from recorder import record
-from cairosvg import svg2png
+#from cairosvg import svg2png
 from DialogFrameSimple import DialogFrameSimple
 import pprint
 
 def write_png(chessboard, start = None, end = None):
     if start == None:
         chessboardSvg = chess.svg.board(chessboard)
-        svg2png(bytestring=chessboardSvg,write_to='test.png')
+        outfile = open('test.svg','w')
+        outfile.write(chessboardSvg)
+        outfile.close()
+        #svg2png(bytestring=chessboardSvg,write_to='test.png')
     else:
         displaySuggestedMove = chess.svg.board(chessboard, arrows=[chess.svg.Arrow(start, end)])
-        svg2png(bytestring=displaySuggestedMove,write_to='test.png')
+        outfile = open('test.svg','w')
+        outfile.write(displaySuggestedMove)
+        outfile.close()
+        #svg2png(bytestring=displaySuggestedMove,write_to='test.png')
 
 
 class FrameDM:

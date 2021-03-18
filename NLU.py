@@ -16,6 +16,7 @@ class NLUDefault:
     def parse(self, wit_resp):
 
         self.UnderstoodText = wit_resp['text']
+        #print(self.UnderstoodText)
 
         if wit_resp['intents'] == []:
             return self.Intent, self.UnderstoodText, self.Slots

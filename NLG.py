@@ -18,7 +18,7 @@ class NLGDefault:
             return "That move is invalid, try again."
 
         elif intent == 'successful_turn':
-            return "The computer made this move: {}\nWhat move do you want to play now?".format(more_info)
+            return "The computer made this move: {}\n-------------------------\nWhat move do you want to play now?".format(more_info)
 
         elif intent == 'prompt_move':
             return "What move do you want to play now?"
